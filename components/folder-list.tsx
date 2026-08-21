@@ -26,7 +26,7 @@ export default function FolderList({
         isActive={pathname === "/"}
       />
 
-      <p className="mt-4 mb-1 px-3 text-xs font-medium text-zinc-400 dark:text-zinc-500">
+      <p className="mt-4 mb-1 px-3 text-xs font-medium text-[var(--text-sub)]">
         폴더
       </p>
 
@@ -60,22 +60,14 @@ function SidebarItem({ href, label, count, isActive }: SidebarItemProps) {
   return (
     <Link
       href={href}
-      className={`flex w-full items-center justify-between rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+      className={`flex w-full items-center justify-between rounded-md px-3 py-2 text-sm transition-colors ${
         isActive
-          ? "bg-zinc-900 text-white dark:bg-zinc-50 dark:text-zinc-900"
-          : "text-zinc-600 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-900"
+          ? "bg-[var(--hover-bg)] font-medium text-[var(--text)]"
+          : "font-medium text-[var(--text-sub)] hover:bg-[var(--hover-bg)] hover:text-[var(--text)]"
       }`}
     >
       <span className="truncate">{label}</span>
-      <span
-        className={`text-xs ${
-          isActive
-            ? "text-white/70 dark:text-zinc-900/60"
-            : "text-zinc-400 dark:text-zinc-500"
-        }`}
-      >
-        {count}
-      </span>
+      <span className="text-xs text-[var(--text-sub)]">{count}</span>
     </Link>
   );
 }

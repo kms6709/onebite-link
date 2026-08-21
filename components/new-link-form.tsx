@@ -19,14 +19,11 @@ export default function NewLinkForm({ folders }: NewLinkFormProps) {
   }
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="flex max-w-lg flex-col gap-5"
-    >
+    <form onSubmit={handleSubmit} className="flex max-w-lg flex-col gap-5">
       <div className="flex flex-col gap-1.5">
         <label
           htmlFor="url"
-          className="text-sm font-medium text-zinc-700 dark:text-zinc-300"
+          className="text-sm font-medium text-[var(--text)]"
         >
           링크 주소
         </label>
@@ -37,14 +34,14 @@ export default function NewLinkForm({ folders }: NewLinkFormProps) {
           placeholder="https://example.com"
           value={url}
           onChange={(event) => setUrl(event.target.value)}
-          className="h-11 rounded-lg border border-zinc-200 bg-white px-3 text-sm text-zinc-900 outline-none placeholder:text-zinc-400 focus:border-zinc-400 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-50 dark:focus:border-zinc-600"
+          className="h-11 rounded-md border border-[var(--border)] bg-[var(--surface)] px-3 text-sm text-[var(--text)] outline-none placeholder:text-[var(--placeholder)] focus:border-[var(--accent)]"
         />
       </div>
 
       <div className="flex flex-col gap-1.5">
         <label
           htmlFor="folder"
-          className="text-sm font-medium text-zinc-700 dark:text-zinc-300"
+          className="text-sm font-medium text-[var(--text)]"
         >
           폴더
         </label>
@@ -53,7 +50,7 @@ export default function NewLinkForm({ folders }: NewLinkFormProps) {
           required
           value={folderId}
           onChange={(event) => setFolderId(event.target.value)}
-          className="h-11 rounded-lg border border-zinc-200 bg-white px-3 text-sm text-zinc-900 outline-none focus:border-zinc-400 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-50 dark:focus:border-zinc-600"
+          className="h-11 rounded-md border border-[var(--border)] bg-[var(--surface)] px-3 text-sm text-[var(--text)] outline-none focus:border-[var(--accent)]"
         >
           <option value="" disabled>
             폴더 선택
@@ -68,7 +65,7 @@ export default function NewLinkForm({ folders }: NewLinkFormProps) {
 
       <button
         type="submit"
-        className="h-11 rounded-full bg-zinc-900 text-sm font-medium text-white transition-colors hover:bg-zinc-700 dark:bg-zinc-50 dark:text-zinc-900 dark:hover:bg-zinc-300"
+        className="h-11 rounded-md bg-[var(--accent)] text-sm font-medium text-white transition-colors hover:bg-[var(--accent-hover)]"
       >
         저장
       </button>

@@ -25,8 +25,8 @@ export default function PageShell({
         totalCount={totalCount}
       />
 
-      <main className="flex-1 overflow-y-auto px-8 py-6">
-        <h1 className="mb-6 text-lg font-semibold text-zinc-900 dark:text-zinc-50">
+      <main className="flex-1 overflow-y-auto px-8 py-10">
+        <h1 className="mb-8 text-xl font-semibold text-[var(--text)]">
           {title}
         </h1>
         {children}

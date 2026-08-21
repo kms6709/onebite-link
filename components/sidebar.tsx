@@ -13,7 +13,7 @@ export default function Sidebar({
   totalCount,
 }: SidebarProps) {
   return (
-    <aside className="w-56 shrink-0 border-r border-zinc-200 bg-white px-3 py-6 dark:border-zinc-800 dark:bg-black">
+    <aside className="w-56 shrink-0 border-r border-[var(--border)] bg-[var(--background)] px-3 py-6">
       <FolderList
         folders={folders}
         countByFolderId={countByFolderId}

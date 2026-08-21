@@ -5,7 +5,7 @@ export default function LinkGrid({ bookmarks }: { bookmarks: Bookmark[] }) {
   if (bookmarks.length === 0) {
     return (
       <div className="flex flex-1 items-center justify-center py-24">
-        <p className="text-sm text-zinc-400 dark:text-zinc-500">
+        <p className="text-sm text-[var(--text-sub)]">
           등록된 링크가 없습니다.
         </p>
       </div>

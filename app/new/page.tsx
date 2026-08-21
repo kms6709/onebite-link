@@ -5,7 +5,7 @@ import { bookmarks, folders, getFolderCounts } from "@/app/_lib/mock-data";
 
 export default function NewLinkPage() {
   return (
-    <div className="flex min-h-screen flex-col bg-zinc-50 dark:bg-black">
+    <div className="flex min-h-screen flex-col bg-[var(--background)]">
       <Header />
       <PageShell
         folders={folders}
