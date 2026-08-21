@@ -1,9 +1,9 @@
 import Header from "@/components/header";
 import PageShell from "@/components/page-shell";
-import LinkGrid from "@/components/link-grid";
-import { bookmarks, folders, getFolderCounts } from "./_lib/mock-data";
+import NewLinkForm from "@/components/new-link-form";
+import { bookmarks, folders, getFolderCounts } from "@/app/_lib/mock-data";
 
-export default function Home() {
+export default function NewLinkPage() {
   return (
     <div className="flex min-h-screen flex-col bg-zinc-50 dark:bg-black">
       <Header />
@@ -11,9 +11,9 @@ export default function Home() {
         folders={folders}
         countByFolderId={getFolderCounts(bookmarks)}
         totalCount={bookmarks.length}
-        title="All"
+        title="새 링크"
       >
-        <LinkGrid bookmarks={bookmarks} />
+        <NewLinkForm folders={folders} />
       </PageShell>
     </div>
   );
