@@ -3,6 +3,7 @@
 import { useState } from "react";
 import type { Bookmark } from "@/app/_types/bookmark";
 import DeleteLinkModal from "./delete-link-modal";
+import EditLinkModal from "./edit-link-modal";
 
 function getHostname(url: string): string {
   try {
@@ -13,6 +14,7 @@ function getHostname(url: string): string {
 }
 
 export default function LinkCard({ bookmark }: { bookmark: Bookmark }) {
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const hostname = getHostname(bookmark.url);
 
@@ -55,18 +57,40 @@ export default function LinkCard({ bookmark }: { bookmark: Bookmark }) {
         </div>
       </a>
 
-      <button
-        type="button"
-        onClick={(event) => {
-          event.preventDefault();
-          event.stopPropagation();
-          setIsDeleteModalOpen(true);
-        }}
-        aria-label={`${bookmark.title} 링크 삭제`}
-        className="absolute top-2 right-2 hidden h-7 w-7 items-center justify-center rounded-md bg-black/50 text-white backdrop-blur-sm transition-colors group-hover:flex hover:bg-[var(--error)]"
-      >
-        <TrashIcon />
-      </button>
+      <div className="absolute top-2 right-2 hidden items-center gap-1 group-hover:flex">
+        <button
+          type="button"
+          onClick={(event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            setIsEditModalOpen(true);
+          }}
+          aria-label={`${bookmark.title} 링크 수정`}
+          className="flex h-7 w-7 items-center justify-center rounded-md bg-black/50 text-white backdrop-blur-sm transition-colors hover:bg-[var(--accent)]"
+        >
+          <PencilIcon />
+        </button>
+
+        <button
+          type="button"
+          onClick={(event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            setIsDeleteModalOpen(true);
+          }}
+          aria-label={`${bookmark.title} 링크 삭제`}
+          className="flex h-7 w-7 items-center justify-center rounded-md bg-black/50 text-white backdrop-blur-sm transition-colors hover:bg-[var(--error)]"
+        >
+          <TrashIcon />
+        </button>
+      </div>
+
+      {isEditModalOpen && (
+        <EditLinkModal
+          bookmark={bookmark}
+          onClose={() => setIsEditModalOpen(false)}
+        />
+      )}
 
       {isDeleteModalOpen && (
         <DeleteLinkModal
@@ -75,6 +99,25 @@ export default function LinkCard({ bookmark }: { bookmark: Bookmark }) {
         />
       )}
     </div>
+  );
+}
+
+function PencilIcon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth={1.5}
+      stroke="currentColor"
+      className="h-4 w-4"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
+      />
+    </svg>
   );
 }
 

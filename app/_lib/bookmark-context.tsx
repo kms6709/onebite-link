@@ -12,9 +12,16 @@ type NewBookmarkInput = {
   thumbnail: string;
 };
 
+type BookmarkUpdateInput = {
+  folderId: string;
+  title: string;
+  description: string;
+};
+
 type BookmarkContextValue = {
   bookmarks: Bookmark[];
   addBookmark: (input: NewBookmarkInput) => void;
+  updateBookmark: (id: string, input: BookmarkUpdateInput) => void;
   deleteBookmark: (id: string) => void;
 };
 
@@ -31,13 +38,31 @@ export function BookmarkProvider({ children }: { children: ReactNode }) {
     setBookmarks((prev) => [newBookmark, ...prev]);
   }
 
+  function updateBookmark(id: string, input: BookmarkUpdateInput) {
+    const title = input.title.trim();
+    if (!title) return;
+
+    setBookmarks((prev) =>
+      prev.map((bookmark) =>
+        bookmark.id === id
+          ? {
+              ...bookmark,
+              folderId: input.folderId,
+              title,
+              description: input.description.trim(),
+            }
+          : bookmark
+      )
+    );
+  }
+
   function deleteBookmark(id: string) {
     setBookmarks((prev) => prev.filter((bookmark) => bookmark.id !== id));
   }
 
   return (
     <BookmarkContext.Provider
-      value={{ bookmarks, addBookmark, deleteBookmark }}
+      value={{ bookmarks, addBookmark, updateBookmark, deleteBookmark }}
     >
       {children}
     </BookmarkContext.Provider>
