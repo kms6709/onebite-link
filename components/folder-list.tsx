@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { Folder } from "@/app/_types/bookmark";
 import DeleteFolderModal from "./delete-folder-modal";
+import EditFolderModal from "./edit-folder-modal";
 
 type FolderListProps = {
   folders: Folder[];
@@ -19,6 +20,7 @@ export default function FolderList({
 }: FolderListProps) {
   const pathname = usePathname();
   const [folderToDelete, setFolderToDelete] = useState<Folder | null>(null);
+  const [folderToEdit, setFolderToEdit] = useState<Folder | null>(null);
 
   return (
     <nav className="flex flex-col gap-1">
@@ -43,12 +45,20 @@ export default function FolderList({
                 label={folder.name}
                 count={countByFolderId[folder.id] ?? 0}
                 isActive={pathname === href}
+                onRequestEdit={() => setFolderToEdit(folder)}
                 onRequestDelete={() => setFolderToDelete(folder)}
               />
             </li>
           );
         })}
       </ul>
+
+      {folderToEdit && (
+        <EditFolderModal
+          folder={folderToEdit}
+          onClose={() => setFolderToEdit(null)}
+        />
+      )}
 
       {folderToDelete && (
         <DeleteFolderModal
@@ -65,6 +75,7 @@ type SidebarItemProps = {
   label: string;
   count: number;
   isActive: boolean;
+  onRequestEdit?: () => void;
   onRequestDelete?: () => void;
 };
 
@@ -73,8 +84,11 @@ function SidebarItem({
   label,
   count,
   isActive,
+  onRequestEdit,
   onRequestDelete,
 }: SidebarItemProps) {
+  const hasActions = Boolean(onRequestEdit || onRequestDelete);
+
   return (
     <div className="group relative">
       <Link
@@ -88,28 +102,66 @@ function SidebarItem({
         <span className="truncate">{label}</span>
         <span
           className={`text-xs text-[var(--text-sub)] ${
-            onRequestDelete ? "group-hover:opacity-0" : ""
+            hasActions ? "group-hover:opacity-0" : ""
           }`}
         >
           {count}
         </span>
       </Link>
 
-      {onRequestDelete && (
-        <button
-          type="button"
-          onClick={(event) => {
-            event.preventDefault();
-            event.stopPropagation();
-            onRequestDelete();
-          }}
-          aria-label={`${label} 폴더 삭제`}
-          className="absolute top-1/2 right-2 hidden h-6 w-6 -translate-y-1/2 items-center justify-center rounded text-[var(--text-sub)] transition-colors hover:text-[var(--error)] group-hover:flex"
-        >
-          <TrashIcon />
-        </button>
+      {hasActions && (
+        <div className="absolute top-1/2 right-2 hidden -translate-y-1/2 items-center gap-0.5 group-hover:flex">
+          {onRequestEdit && (
+            <button
+              type="button"
+              onClick={(event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                onRequestEdit();
+              }}
+              aria-label={`${label} 폴더 수정`}
+              className="flex h-6 w-6 items-center justify-center rounded text-[var(--text-sub)] transition-colors hover:text-[var(--accent)]"
+            >
+              <PencilIcon />
+            </button>
+          )}
+
+          {onRequestDelete && (
+            <button
+              type="button"
+              onClick={(event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                onRequestDelete();
+              }}
+              aria-label={`${label} 폴더 삭제`}
+              className="flex h-6 w-6 items-center justify-center rounded text-[var(--text-sub)] transition-colors hover:text-[var(--error)]"
+            >
+              <TrashIcon />
+            </button>
+          )}
+        </div>
       )}
     </div>
+  );
+}
+
+function PencilIcon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth={1.5}
+      stroke="currentColor"
+      className="h-4 w-4"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
+      />
+    </svg>
   );
 }
 

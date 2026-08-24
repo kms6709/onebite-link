@@ -7,6 +7,7 @@ import { folders as initialFolders } from "@/app/_lib/mock-data";
 type FolderContextValue = {
   folders: Folder[];
   addFolder: (name: string) => void;
+  renameFolder: (id: string, name: string) => void;
   deleteFolder: (id: string) => void;
 };
 
@@ -26,12 +27,25 @@ export function FolderProvider({ children }: { children: ReactNode }) {
     setFolders((prev) => [...prev, newFolder]);
   }
 
+  function renameFolder(id: string, name: string) {
+    const trimmed = name.trim();
+    if (!trimmed) return;
+
+    setFolders((prev) =>
+      prev.map((folder) =>
+        folder.id === id ? { ...folder, name: trimmed } : folder
+      )
+    );
+  }
+
   function deleteFolder(id: string) {
     setFolders((prev) => prev.filter((folder) => folder.id !== id));
   }
 
   return (
-    <FolderContext.Provider value={{ folders, addFolder, deleteFolder }}>
+    <FolderContext.Provider
+      value={{ folders, addFolder, renameFolder, deleteFolder }}
+    >
       {children}
     </FolderContext.Provider>
   );
