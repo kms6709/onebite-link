@@ -3,16 +3,56 @@
 import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { useFolders } from "@/app/_lib/folder-context";
+import { useBookmarks } from "@/app/_lib/bookmark-context";
+
+type OpenGraphResponse = {
+  title: string;
+  description: string;
+  thumbnail: string;
+};
 
 export default function NewLinkForm() {
   const router = useRouter();
   const { folders } = useFolders();
+  const { addBookmark } = useBookmarks();
   const [url, setUrl] = useState("");
   const [folderId, setFolderId] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState("");
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    router.push("/");
+    if (isSubmitting) return;
+
+    setError("");
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch(
+        `/api/og?url=${encodeURIComponent(url)}`
+      );
+
+      if (!response.ok) {
+        setError("링크 정보를 가져오지 못했습니다. 주소를 확인해 주세요.");
+        return;
+      }
+
+      const og: OpenGraphResponse = await response.json();
+
+      addBookmark({
+        url,
+        folderId,
+        title: og.title || url,
+        description: og.description,
+        thumbnail: og.thumbnail,
+      });
+
+      router.push("/");
+    } catch {
+      setError("링크 정보를 가져오지 못했습니다. 주소를 확인해 주세요.");
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   return (
@@ -60,11 +100,14 @@ export default function NewLinkForm() {
         </select>
       </div>
 
+      {error && <p className="text-sm text-[var(--error)]">{error}</p>}
+
       <button
         type="submit"
-        className="h-11 rounded-md bg-[var(--accent)] text-sm font-medium text-white transition-colors hover:bg-[var(--accent-hover)]"
+        disabled={isSubmitting}
+        className="h-11 rounded-md bg-[var(--accent)] text-sm font-medium text-white transition-colors hover:bg-[var(--accent-hover)] disabled:cursor-not-allowed disabled:opacity-60"
       >
-        저장
+        {isSubmitting ? "확인 중..." : "확인"}
       </button>
     </form>
   );

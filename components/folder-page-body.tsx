@@ -1,21 +1,18 @@
 "use client";
 
 import { useFolders } from "@/app/_lib/folder-context";
+import { useBookmarks } from "@/app/_lib/bookmark-context";
 import { getFolderCounts } from "@/app/_lib/mock-data";
-import type { Bookmark } from "@/app/_types/bookmark";
 import PageShell from "./page-shell";
 import LinkGrid from "./link-grid";
 
 type FolderPageBodyProps = {
   folderId: string;
-  bookmarks: Bookmark[];
 };
 
-export default function FolderPageBody({
-  folderId,
-  bookmarks,
-}: FolderPageBodyProps) {
+export default function FolderPageBody({ folderId }: FolderPageBodyProps) {
   const { folders } = useFolders();
+  const { bookmarks } = useBookmarks();
   const folder = folders.find((item) => item.id === folderId);
 
   const countByFolderId = getFolderCounts(bookmarks);

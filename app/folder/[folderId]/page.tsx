@@ -1,6 +1,5 @@
 import Header from "@/components/header";
 import FolderPageBody from "@/components/folder-page-body";
-import { bookmarks } from "@/app/_lib/mock-data";
 
 export default async function FolderPage(
   props: PageProps<"/folder/[folderId]">
@@ -10,7 +9,7 @@ export default async function FolderPage(
   return (
     <div className="flex min-h-screen flex-col bg-[var(--background)]">
       <Header />
-      <FolderPageBody folderId={folderId} bookmarks={bookmarks} />
+      <FolderPageBody folderId={folderId} />
     </div>
   );
 }
