@@ -2,14 +2,11 @@
 
 import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
-import type { Folder } from "@/app/_types/bookmark";
+import { useFolders } from "@/app/_lib/folder-context";
 
-type NewLinkFormProps = {
-  folders: Folder[];
-};
-
-export default function NewLinkForm({ folders }: NewLinkFormProps) {
+export default function NewLinkForm() {
   const router = useRouter();
+  const { folders } = useFolders();
   const [url, setUrl] = useState("");
   const [folderId, setFolderId] = useState("");
 

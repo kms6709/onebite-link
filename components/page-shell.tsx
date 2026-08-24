@@ -1,9 +1,7 @@
 import type { ReactNode } from "react";
-import type { Folder } from "@/app/_types/bookmark";
 import Sidebar from "./sidebar";
 
 type PageShellProps = {
-  folders: Folder[];
   countByFolderId: Record<string, number>;
   totalCount: number;
   title: string;
@@ -11,7 +9,6 @@ type PageShellProps = {
 };
 
 export default function PageShell({
-  folders,
   countByFolderId,
   totalCount,
   title,
@@ -19,11 +16,7 @@ export default function PageShell({
 }: PageShellProps) {
   return (
     <div className="flex flex-1">
-      <Sidebar
-        folders={folders}
-        countByFolderId={countByFolderId}
-        totalCount={totalCount}
-      />
+      <Sidebar countByFolderId={countByFolderId} totalCount={totalCount} />
 
       <main className="flex-1 overflow-y-auto px-8 py-10">
         <h1 className="mb-8 text-xl font-semibold text-[var(--text)]">
