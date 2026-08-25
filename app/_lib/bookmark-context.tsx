@@ -21,7 +21,7 @@ type BookmarkUpdateInput = {
 type BookmarkContextValue = {
   bookmarks: Bookmark[];
   addBookmark: (input: NewBookmarkInput) => Promise<void>;
-  updateBookmark: (id: string, input: BookmarkUpdateInput) => void;
+  updateBookmark: (id: string, input: BookmarkUpdateInput) => Promise<void>;
   deleteBookmark: (id: string) => void;
 };
 
@@ -82,19 +82,28 @@ export function BookmarkProvider({ children }: { children: ReactNode }) {
     setBookmarks((prev) => [toBookmark(data), ...prev]);
   }
 
-  function updateBookmark(id: string, input: BookmarkUpdateInput) {
+  async function updateBookmark(id: string, input: BookmarkUpdateInput) {
     const title = input.title.trim();
     if (!title) return;
+
+    const description = input.description.trim();
+
+    const supabase = createClient();
+    const { error } = await supabase
+      .from("links")
+      .update({
+        title,
+        description,
+        folder_id: input.folderId ? Number(input.folderId) : null,
+      })
+      .eq("id", id);
+
+    if (error) return;
 
     setBookmarks((prev) =>
       prev.map((bookmark) =>
         bookmark.id === id
-          ? {
-              ...bookmark,
-              folderId: input.folderId,
-              title,
-              description: input.description.trim(),
-            }
+          ? { ...bookmark, folderId: input.folderId, title, description }
           : bookmark
       )
     );

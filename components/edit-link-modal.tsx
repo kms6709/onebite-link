@@ -20,10 +20,10 @@ export default function EditLinkModal({
   const [title, setTitle] = useState(bookmark.title);
   const [description, setDescription] = useState(bookmark.description);
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!title.trim()) return;
-    updateBookmark(bookmark.id, { folderId, title, description });
+    await updateBookmark(bookmark.id, { folderId, title, description });
     onClose();
   }
 
