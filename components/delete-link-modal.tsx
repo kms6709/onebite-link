@@ -14,8 +14,8 @@ export default function DeleteLinkModal({
 }: DeleteLinkModalProps) {
   const { deleteBookmark } = useBookmarks();
 
-  function handleConfirm() {
-    deleteBookmark(bookmark.id);
+  async function handleConfirm() {
+    await deleteBookmark(bookmark.id);
     onClose();
   }
 
