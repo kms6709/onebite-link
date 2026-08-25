@@ -16,10 +16,10 @@ export default function EditFolderModal({
   const { renameFolder } = useFolders();
   const [name, setName] = useState(folder.name);
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!name.trim()) return;
-    renameFolder(folder.id, name);
+    await renameFolder(folder.id, name);
     onClose();
   }
 
