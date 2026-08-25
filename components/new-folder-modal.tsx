@@ -8,13 +8,13 @@ type NewFolderModalProps = {
 };
 
 export default function NewFolderModal({ onClose }: NewFolderModalProps) {
-  const { addFolder } = useFolders();
+  const { addFolder, isAddingFolder } = useFolders();
   const [name, setName] = useState("");
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!name.trim()) return;
-    addFolder(name);
+    if (!name.trim() || isAddingFolder) return;
+    await addFolder(name);
     onClose();
   }
 
@@ -61,9 +61,10 @@ export default function NewFolderModal({ onClose }: NewFolderModalProps) {
           </button>
           <button
             type="submit"
-            className="h-9 rounded-md bg-[var(--accent)] px-4 text-sm font-medium text-white transition-colors hover:bg-[var(--accent-hover)]"
+            disabled={isAddingFolder}
+            className="h-9 rounded-md bg-[var(--accent)] px-4 text-sm font-medium text-white transition-colors hover:bg-[var(--accent-hover)] disabled:cursor-not-allowed disabled:opacity-60"
           >
-            저장
+            {isAddingFolder ? "저장 중..." : "저장"}
           </button>
         </div>
       </form>
