@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useRef, useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { useFolders } from "@/app/_lib/folder-context";
 import { useBookmarks } from "@/app/_lib/bookmark-context";
@@ -18,12 +18,14 @@ export default function NewLinkForm() {
   const [url, setUrl] = useState("");
   const [folderId, setFolderId] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const isSubmittingRef = useRef(false);
   const [error, setError] = useState("");
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (isSubmitting) return;
+    if (isSubmittingRef.current) return;
 
+    isSubmittingRef.current = true;
     setError("");
     setIsSubmitting(true);
 
@@ -39,7 +41,7 @@ export default function NewLinkForm() {
 
       const og: OpenGraphResponse = await response.json();
 
-      addBookmark({
+      await addBookmark({
         url,
         folderId,
         title: og.title || url,
@@ -51,6 +53,7 @@ export default function NewLinkForm() {
     } catch {
       setError("링크 정보를 가져오지 못했습니다. 주소를 확인해 주세요.");
     } finally {
+      isSubmittingRef.current = false;
       setIsSubmitting(false);
     }
   }
