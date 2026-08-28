@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { useFolders } from "@/app/_lib/folder-context";
 import { createClient } from "@/utils/supabase/client";
 import FolderList from "./folder-list";
@@ -44,6 +45,13 @@ export default function Sidebar({ countByFolderId, totalCount }: SidebarProps) {
         <LogoutIcon />
         {isLoggingOut ? "로그아웃 중..." : "로그아웃"}
       </button>
+
+      <Link
+        href="/privacy"
+        className="mt-1 px-3 py-1 text-xs text-[var(--text-sub)] transition-colors hover:text-[var(--text)]"
+      >
+        개인정보 처리방침
+      </Link>
     </aside>
   );
 }

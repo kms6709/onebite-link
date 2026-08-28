@@ -134,6 +134,13 @@ export default function SignupPage() {
           >
             이미 계정이 있으신가요? 로그인
           </Link>
+
+          <Link
+            href="/privacy"
+            className="text-center text-xs text-[var(--text-sub)] hover:underline"
+          >
+            개인정보 처리방침
+          </Link>
         </form>
       </div>
     </div>
