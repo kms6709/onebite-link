@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/utils/supabase/client";
@@ -45,6 +46,16 @@ export default function LoginPage() {
     }
 
     router.push("/");
+  }
+
+  async function handleKakaoLogin() {
+    const supabase = createClient();
+    await supabase.auth.signInWithOAuth({
+      provider: "kakao",
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback`,
+      },
+    });
   }
 
   return (
@@ -103,6 +114,26 @@ export default function LoginPage() {
           >
             {isSubmitting ? "로그인 중..." : "로그인"}
           </button>
+
+          <button
+            type="button"
+            onClick={handleKakaoLogin}
+            className="relative h-11 w-full overflow-hidden rounded-md"
+          >
+            <Image
+              src="/kakao_login_medium_wide.png"
+              alt="카카오 로그인"
+              fill
+              className="object-cover"
+            />
+          </button>
+
+          <Link
+            href="/forgot-password"
+            className="text-center text-sm text-[var(--accent)] hover:underline"
+          >
+            비밀번호를 잊으셨나요?
+          </Link>
 
           <Link
             href="/signup"
