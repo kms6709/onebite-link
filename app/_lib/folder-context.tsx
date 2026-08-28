@@ -10,6 +10,7 @@ import {
 } from "react";
 import type { Folder } from "@/app/_types/bookmark";
 import { createClient } from "@/utils/supabase/client";
+import { useAuthUserId } from "@/app/_lib/use-auth-user-id";
 
 type FolderContextValue = {
   folders: Folder[];
@@ -25,19 +26,26 @@ export function FolderProvider({ children }: { children: ReactNode }) {
   const [folders, setFolders] = useState<Folder[]>([]);
   const [isAddingFolder, setIsAddingFolder] = useState(false);
   const isAddingRef = useRef(false);
+  const userId = useAuthUserId();
 
   useEffect(() => {
+    if (!userId) {
+      queueMicrotask(() => setFolders([]));
+      return;
+    }
+
     const supabase = createClient();
 
     supabase
       .from("folders")
       .select("id, name")
+      .eq("user_id", userId)
       .order("id", { ascending: true })
       .then(({ data, error }) => {
         if (error || !data) return;
         setFolders(data.map((row) => ({ id: String(row.id), name: row.name })));
       });
-  }, []);
+  }, [userId]);
 
   async function addFolder(name: string) {
     const trimmed = name.trim();

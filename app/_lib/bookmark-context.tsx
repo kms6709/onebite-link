@@ -3,6 +3,7 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import type { Bookmark } from "@/app/_types/bookmark";
 import { createClient } from "@/utils/supabase/client";
+import { useAuthUserId } from "@/app/_lib/use-auth-user-id";
 
 type NewBookmarkInput = {
   url: string;
@@ -49,19 +50,26 @@ function toBookmark(row: LinkRow): Bookmark {
 
 export function BookmarkProvider({ children }: { children: ReactNode }) {
   const [bookmarks, setBookmarks] = useState<Bookmark[]>([]);
+  const userId = useAuthUserId();
 
   useEffect(() => {
+    if (!userId) {
+      queueMicrotask(() => setBookmarks([]));
+      return;
+    }
+
     const supabase = createClient();
 
     supabase
       .from("links")
       .select("id, url, title, description, thumbnail_url, folder_id")
+      .eq("user_id", userId)
       .order("id", { ascending: false })
       .then(({ data, error }) => {
         if (error || !data) return;
         setBookmarks(data.map(toBookmark));
       });
-  }, []);
+  }, [userId]);
 
   async function addBookmark(input: NewBookmarkInput) {
     const supabase = createClient();
