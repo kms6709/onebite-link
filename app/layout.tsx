@@ -2,10 +2,31 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { FolderProvider } from "@/app/_lib/folder-context";
 import { BookmarkProvider } from "@/app/_lib/bookmark-context";
+import { defaultDescription, ogImage, siteName } from "@/app/_lib/metadata";
 
 export const metadata: Metadata = {
-  title: "한입 링크",
-  description: "북마크를 폴더별로 정리하고 관리하는 서비스",
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"
+  ),
+  title: {
+    template: `%s | ${siteName}`,
+    default: siteName,
+  },
+  description: defaultDescription,
+  openGraph: {
+    title: siteName,
+    description: defaultDescription,
+    siteName,
+    images: [ogImage],
+    locale: "ko_KR",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: siteName,
+    description: defaultDescription,
+    images: [ogImage.url],
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
